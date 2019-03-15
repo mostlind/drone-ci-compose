@@ -19,8 +19,9 @@ services:
       - "8081:80"
     restart: always
     deploy:
-      constraints:
-        - node.role === manager
+      placement:
+        constraints:
+          - node.role == manager
 
   registry:
     image: registry
