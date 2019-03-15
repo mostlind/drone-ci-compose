@@ -1,0 +1,32 @@
+version: "3.4"
+services:
+  # https://docs.drone.io/installation/github/single-machine/
+  drone:
+    image: drone/drone
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - /var/lib/drone:/data
+    environment:
+      - DRONE_GITHUB_SERVER
+      - DRONE_GITHUB_CLIENT_ID
+      - DRONE_GITHUB_CLIENT_SECRET
+      - DRONE_RUNNER_CAPACITY
+      - DRONE_SERVER_HOST
+      - DRONE_SERVER_PROTO
+      - DRONE_RPC_SECRET
+    ports:
+      # - "4433:443"
+      - "8081:80"
+    restart: always
+    deploy:
+      constraints:
+        - node.role === manager
+
+  registry:
+    image: registry
+    environment:
+      - REGISTRY_STORAGE_FILESYSTEM_ROOTDIRECTORY
+    volumes:
+      - ./registry-data:/data
+    ports:
+      - "5000:5000"
